@@ -1,0 +1,5 @@
+"Decision","BranchOutcome","TestID","Expected","Actual","Covered"
+"D1 req.user exists","Missing user path","WB-ST-01","Deny 403","Deny 403","Yes"
+"D1 req.user exists","User exists","WB-ST-02, WB-ST-03","Continue to D2","Continue to D2","Yes"
+"D2 role allowed","Allowed","WB-ST-03","Call next()","Call next()","Yes"
+"D2 role allowed","Not allowed","WB-ST-02","Deny 403","Deny 403","Yes"
