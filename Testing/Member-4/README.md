@@ -106,7 +106,7 @@ Sensitive information such as JWT tokens and personal email addresses should be 
 
 GitHub Issues was used to record, assign, track, and manage defects identified during the security testing of the StudentTrack application.
 
-### 4.2 Identified Defect
+### 4.2 Identified Defect 1
 
 **Issue #2: User Enumeration Through Different Login Error Messages**
 
@@ -114,7 +114,7 @@ The login API returned different error messages for non-existing email addresses
 
 This could allow attackers to identify registered user email addresses.
 
-### 4.3 Root Cause Analysis
+### Root Cause Analysis
 
 The root cause was identified in the login route (`Backend/routes/auth.js`).
 
@@ -125,13 +125,13 @@ Two different error messages were returned:
 
 The different responses created a potential user enumeration vulnerability.
 
-### 4.4 Fix Implemented
+### Fix Implemented
 
 Both login failure conditions were updated to return the same generic error message:
 
 `Invalid email or password`
 
-### 4.5 Retesting Results
+### Retesting Results
 
 The fix was verified using Postman.
 
@@ -142,7 +142,7 @@ The fix was verified using Postman.
 
 Both scenarios returned the same generic error message.
 
-### 4.6 Defect Lifecycle
+### Defect Lifecycle
 
 The complete defect lifecycle was followed for GitHub Issue #2.
 
@@ -156,7 +156,7 @@ The complete defect lifecycle was followed for GitHub Issue #2.
 | Verified | Both retesting scenarios passed |
 | Closed | GitHub Issue #2 closed after successful verification |
 
-### 4.7 Supporting Evidence
+### Supporting Evidence
 
 The following supporting documents and screenshots are available in the `Defects/Issue-2-User-Enumeration/` directory:
 
@@ -165,6 +165,71 @@ The following supporting documents and screenshots are available in the `Defects
 - Postman retesting screenshot – Existing email with incorrect password
 
 **GitHub Issue:** [Issue #2 – User Enumeration Through Different Login Error Messages](https://github.com/GithmiJayakody/StudentTrack-Testing/issues/2)
+
+**Status:** Fixed, verified, and closed.
+
+### 4.3 Identified Defect 2
+
+**Issue #3: Backend Registration Accepts Passwords Shorter Than 8 Characters**
+
+The backend registration API accepted passwords shorter than 8 characters when requests were sent directly to the API.
+
+Although the frontend registration form enforced a minimum password length of 8 characters, the backend did not independently validate the password length.
+
+This allowed users to bypass frontend validation by sending direct API requests.
+
+### Root Cause Analysis
+
+The root cause was identified in the registration route (`Backend/routes/auth.js`).
+
+The backend registration route only checked whether the password field was empty. It did not check whether the password contained at least 8 characters.
+
+As a result, a registration request containing a 3-character password (`123`) was accepted by the backend and returned HTTP 201 Created.
+
+### Fix Implemented
+
+Backend password-length validation was added to the registration route.
+
+The backend now checks whether the password contains at least 8 characters.
+
+If the password is shorter than 8 characters, the API returns HTTP 400 Bad Request with the following error message:
+
+`Password must be at least 8 characters long`
+
+### Retesting Results
+
+The fix was verified using Postman.
+
+| Test Case | Scenario | HTTP Status | Result |
+|---|---|---:|---|
+| TC01 | Registration with a 3-character password | 400 | Pass |
+| TC02 | Registration with a valid password | 201 | Pass |
+
+The backend successfully rejected the short password while accepting the valid password.
+
+### Defect Lifecycle
+
+The complete defect lifecycle was followed for GitHub Issue #3.
+
+`New → Assigned → Fixed → Verified → Closed`
+
+| Lifecycle Stage | Activity |
+|---|---|
+| New | Defect reported as GitHub Issue #3 |
+| Assigned | Issue assigned to Member 4 |
+| Fixed | Minimum 8-character password validation added to the registration API |
+| Verified | Short and valid passwords tested successfully using Postman |
+| Closed | GitHub Issue #3 closed after successful verification |
+
+### Supporting Evidence
+
+The following supporting documents and screenshots are available in the `Defects/Issue-3-Weak-Password/` directory:
+
+- Root Cause Analysis document
+- Postman retesting screenshot – Short password rejected
+- Postman retesting screenshot – Valid password accepted
+
+**GitHub Issue:** [Issue #3 – Backend Registration Accepts Passwords Shorter Than 8 Characters](https://github.com/GithmiJayakody/StudentTrack-Testing/issues/3)
 
 **Status:** Fixed, verified, and closed.
 
