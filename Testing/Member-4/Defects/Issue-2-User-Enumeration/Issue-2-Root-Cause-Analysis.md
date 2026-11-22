@@ -1,6 +1,7 @@
 # Root Cause Analysis – Issue #2
 
 ## Bug Title
+
 User Enumeration Through Different Login Error Messages
 
 ## Root Cause
@@ -12,6 +13,7 @@ When a user does not exist, the API returns `Invalid credentials`. However, when
 This difference in error responses creates a user enumeration vulnerability because an attacker may identify registered email addresses by comparing login responses.
 
 ## Affected Component
+
 Backend Authentication – Login API
 
 ## Recommended Solution
@@ -37,6 +39,17 @@ The two login scenarios were retested using Postman. Both returned the same HTTP
 
 The retesting screenshots are available in the `Retesting-Evidence/` directory.
 
+## Git Information
+
+- Branch: `member-4-quality`
+- Commit: `28f9abb`
+- Commit Message: Fix user enumeration vulnerability and add retesting evidence
+
+## GitHub Issue
+
+- Issue: #2 – User Enumeration Through Different Login Error Messages
+- Status: Closed
+
 ## Current Status
 
-Fix implemented and verified through manual retesting. Git commit and final issue closure pending.
+**Fixed, retested, verified, and closed.**

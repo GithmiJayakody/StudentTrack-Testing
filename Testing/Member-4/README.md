@@ -100,15 +100,73 @@ Sensitive information such as JWT tokens and personal email addresses should be 
 
 ## 4. Defect Tracking
 
-**Status:** Pending
+### 4.1 Defect Tracking Tool
 
-Identified defects will be recorded using GitHub Issues. Root Cause Analysis will be performed for significant defects, and the lifecycle of at least one defect will be documented.
+**Tool:** GitHub Issues
 
-The required defect lifecycle is:
+GitHub Issues was used to record, assign, track, and manage defects identified during the security testing of the StudentTrack application.
+
+### 4.2 Identified Defect
+
+**Issue #2: User Enumeration Through Different Login Error Messages**
+
+The login API returned different error messages for non-existing email addresses and existing email addresses with incorrect passwords.
+
+This could allow attackers to identify registered user email addresses.
+
+### 4.3 Root Cause Analysis
+
+The root cause was identified in the login route (`Backend/routes/auth.js`).
+
+Two different error messages were returned:
+
+- Non-existing email: `Invalid credentials`
+- Existing email with incorrect password: `Invalid login credentials`
+
+The different responses created a potential user enumeration vulnerability.
+
+### 4.4 Fix Implemented
+
+Both login failure conditions were updated to return the same generic error message:
+
+`Invalid email or password`
+
+### 4.5 Retesting Results
+
+The fix was verified using Postman.
+
+| Test Case | Scenario | HTTP Status | Result |
+|---|---|---:|---|
+| TC01 | Non-existing email | 400 | Pass |
+| TC02 | Existing email with incorrect password | 400 | Pass |
+
+Both scenarios returned the same generic error message.
+
+### 4.6 Defect Lifecycle
+
+The complete defect lifecycle was followed for GitHub Issue #2.
 
 `New → Assigned → Fixed → Verified → Closed`
 
-Supporting documentation will be maintained in the `Defects/` directory.
+| Lifecycle Stage | Activity |
+|---|---|
+| New | Defect reported as GitHub Issue #2 |
+| Assigned | Issue assigned to Member 4 |
+| Fixed | Login API error messages updated |
+| Verified | Both retesting scenarios passed |
+| Closed | GitHub Issue #2 closed after successful verification |
+
+### 4.7 Supporting Evidence
+
+The following supporting documents and screenshots are available in the `Defects/Issue-2-User-Enumeration/` directory:
+
+- Root Cause Analysis document
+- Postman retesting screenshot – Non-existing email
+- Postman retesting screenshot – Existing email with incorrect password
+
+**GitHub Issue:** [Issue #2 – User Enumeration Through Different Login Error Messages](https://github.com/GithmiJayakody/StudentTrack-Testing/issues/2)
+
+**Status:** Fixed, verified, and closed.
 
 ## 5. SonarQube Analysis & Quality Metrics
 
