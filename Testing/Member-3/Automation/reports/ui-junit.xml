@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="StudentTrack login page (Selenium UI)" time="7.659526" disabled="0" errors="0" tests="4" failures="0" skipped="0" hostname="LAPTOP-DRBI9OIO">
+		<testcase name="UI-01 [Additional] empty email and password shows a validation error" time="2.077998" classname="test" file="D:\QA\StudentTrack-Testing\Testing\Member-3\Automation\UI\login.ui.test.js"/>
+		<testcase name="UI-02 [TC014, DT-R6] account awaiting admin approval cannot log in" time="2.024703" classname="test" file="D:\QA\StudentTrack-Testing\Testing\Member-3\Automation\UI\login.ui.test.js"/>
+		<testcase name="UI-03 [TC013, DT-R1] unregistered email is rejected" time="1.925130" classname="test" file="D:\QA\StudentTrack-Testing\Testing\Member-3\Automation\UI\login.ui.test.js"/>
+		<testcase name="UI-04 [Additional] eye button shows and hides the password" time="1.630717" classname="test" file="D:\QA\StudentTrack-Testing\Testing\Member-3\Automation\UI\login.ui.test.js"/>
+	</testsuite>
+	<!-- tests 4 -->
+	<!-- suites 1 -->
+	<!-- pass 4 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 7872.9227 -->
+</testsuites>

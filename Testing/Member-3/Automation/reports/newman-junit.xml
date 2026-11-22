@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="StudentTrack API Tests" tests="13" time="1.296">
+  <testsuite name="API-01 [TC009, DT-R5] Login - approved student, correct password" id="77290c85-d955-4d9a-a788-263b5dd1f53f" timestamp="2026-11-22T19:48:54.516Z" tests="6" failures="0" errors="0" time="0.201">
+    <testcase name="Status code is 200" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+    <testcase name="Returns a JWT token" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+    <testcase name="User role is student" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+    <testcase name="Email matches the login email" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+    <testcase name="Password hash is not exposed" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+    <testcase name="Responds within 2 seconds" time="0.201" classname="Api01Tc009DtR5LoginApprovedStudentCorrectPassword"/>
+  </testsuite>
+  <testsuite name="API-02 [TC012, DT-R2] Login - approved student, wrong password" id="52a92467-9019-4318-a717-76df52fd361f" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.147">
+    <testcase name="Status code is 400" time="0.147" classname="Api02Tc012DtR2LoginApprovedStudentWrongPassword"/>
+    <testcase name="Message is Invalid login credentials" time="0.147" classname="Api02Tc012DtR2LoginApprovedStudentWrongPassword"/>
+    <testcase name="No token is returned" time="0.147" classname="Api02Tc012DtR2LoginApprovedStudentWrongPassword"/>
+  </testsuite>
+  <testsuite name="API-03 [TC013, DT-R1] Login - unregistered email" id="2cda4683-d7c1-4d2a-b4fb-47852c48ce02" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.083">
+    <testcase name="Status code is 400" time="0.083" classname="Api03Tc013DtR1LoginUnregisteredEmail"/>
+    <testcase name="Message is Invalid credentials" time="0.083" classname="Api03Tc013DtR1LoginUnregisteredEmail"/>
+    <testcase name="No token is returned" time="0.083" classname="Api03Tc013DtR1LoginUnregisteredEmail"/>
+  </testsuite>
+  <testsuite name="API-04 [Additional] Login - missing password" id="e816178b-c424-4f0a-821e-42c8f7585c93" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.002">
+    <testcase name="Status code is 400" time="0.002" classname="Api04AdditionalLoginMissingPassword"/>
+    <testcase name="Message is Email and password are required" time="0.002" classname="Api04AdditionalLoginMissingPassword"/>
+    <testcase name="No token is returned" time="0.002" classname="Api04AdditionalLoginMissingPassword"/>
+  </testsuite>
+  <testsuite name="API-05 [TC014, DT-R6] Login - pending account, correct password" id="7183d060-a92a-474c-80b5-24855227723c" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.128">
+    <testcase name="Status code is 403" time="0.128" classname="Api05Tc014DtR6LoginPendingAccountCorrectPassword"/>
+    <testcase name="Message is Your account is awaiting admin approval." time="0.128" classname="Api05Tc014DtR6LoginPendingAccountCorrectPassword"/>
+    <testcase name="No token is returned" time="0.128" classname="Api05Tc014DtR6LoginPendingAccountCorrectPassword"/>
+  </testsuite>
+  <testsuite name="API-06 [Additional] Get profile - with valid token" id="49f6e8b9-1fd4-4a8a-a4f3-708006a3b6b1" timestamp="2026-11-22T19:48:54.516Z" tests="4" failures="0" errors="0" time="0.109">
+    <testcase name="Status code is 200" time="0.109" classname="Api06AdditionalGetProfileWithValidToken"/>
+    <testcase name="Profile belongs to the logged-in student" time="0.109" classname="Api06AdditionalGetProfileWithValidToken"/>
+    <testcase name="Account is approved" time="0.109" classname="Api06AdditionalGetProfileWithValidToken"/>
+    <testcase name="Password hash is not exposed" time="0.109" classname="Api06AdditionalGetProfileWithValidToken"/>
+  </testsuite>
+  <testsuite name="API-07 [TC030 - API layer] Enrolled subjects - without token" id="13b94a5c-68e8-4c12-b7fc-1e663daf0d1f" timestamp="2026-11-22T19:48:54.516Z" tests="2" failures="0" errors="0" time="0.001">
+    <testcase name="Status code is 401" time="0.001" classname="Api07Tc030ApiLayerEnrolledSubjectsWithoutToken"/>
+    <testcase name="Message is No token, authorization denied" time="0.001" classname="Api07Tc030ApiLayerEnrolledSubjectsWithoutToken"/>
+  </testsuite>
+  <testsuite name="API-08 [TC028 - API layer] All subjects - student token on admin-only endpoint" id="08a69412-48e1-4489-ab01-955f18d49c04" timestamp="2026-11-22T19:48:54.516Z" tests="2" failures="0" errors="0" time="0.002">
+    <testcase name="Status code is 403" time="0.002" classname="Api08Tc028ApiLayerAllSubjectsStudentTokenOnAdminOnlyEndpoint"/>
+    <testcase name="Message is Access denied" time="0.002" classname="Api08Tc028ApiLayerAllSubjectsStudentTokenOnAdminOnlyEndpoint"/>
+  </testsuite>
+  <testsuite name="API-09 [TC020, EP-K2] Join subject - invalid enrollment key" id="1962f9ef-8589-4b44-abda-43f69ebde8b7" timestamp="2026-11-22T19:48:54.516Z" tests="2" failures="0" errors="0" time="0.095">
+    <testcase name="Status code is 404" time="0.095" classname="Api09Tc020EpK2JoinSubjectInvalidEnrollmentKey"/>
+    <testcase name="Message is Invalid enrollment key" time="0.095" classname="Api09Tc020EpK2JoinSubjectInvalidEnrollmentKey"/>
+  </testsuite>
+  <testsuite name="API-10 [TC019] Enrolled subjects - with valid token" id="606f94c9-ecbd-4f54-b3ab-4ad52a8ae769" timestamp="2026-11-22T19:48:54.516Z" tests="2" failures="0" errors="0" time="0.087">
+    <testcase name="Status code is 200" time="0.087" classname="Api10Tc019EnrolledSubjectsWithValidToken"/>
+    <testcase name="Returns a list" time="0.087" classname="Api10Tc019EnrolledSubjectsWithValidToken"/>
+  </testsuite>
+  <testsuite name="API-11 [DT-R3] Login - pending account, wrong password" id="42f28eef-6e53-4650-8d74-945c5bebc3d1" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.137">
+    <testcase name="Status code is 400" time="0.137" classname="Api11DtR3LoginPendingAccountWrongPassword"/>
+    <testcase name="Message is Invalid login credentials" time="0.137" classname="Api11DtR3LoginPendingAccountWrongPassword"/>
+    <testcase name="No token is returned" time="0.137" classname="Api11DtR3LoginPendingAccountWrongPassword"/>
+  </testsuite>
+  <testsuite name="API-12 [DT-R4] Login - rejected account, wrong password" id="b4cebed3-b90b-4145-bdf6-fdea284975c2" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.177">
+    <testcase name="Status code is 400" time="0.177" classname="Api12DtR4LoginRejectedAccountWrongPassword"/>
+    <testcase name="Message is Invalid login credentials" time="0.177" classname="Api12DtR4LoginRejectedAccountWrongPassword"/>
+    <testcase name="No token is returned" time="0.177" classname="Api12DtR4LoginRejectedAccountWrongPassword"/>
+  </testsuite>
+  <testsuite name="API-13 [TC015, DT-R7] Login - rejected account, correct password" id="006b4c1e-57f2-4a9a-b3f7-3e3abf28fd4c" timestamp="2026-11-22T19:48:54.516Z" tests="3" failures="0" errors="0" time="0.127">
+    <testcase name="Status code is 403" time="0.127" classname="Api13Tc015DtR7LoginRejectedAccountCorrectPassword"/>
+    <testcase name="Message is Your registration was rejected. Please contact the administrator." time="0.127" classname="Api13Tc015DtR7LoginRejectedAccountCorrectPassword"/>
+    <testcase name="No token is returned" time="0.127" classname="Api13Tc015DtR7LoginRejectedAccountCorrectPassword"/>
+  </testsuite>
+</testsuites>

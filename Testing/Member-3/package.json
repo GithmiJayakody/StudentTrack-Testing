@@ -1,0 +1,22 @@
+{
+  "name": "studenttrack-member3-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EC4206 Member 3 - BDD (Cucumber), Selenium UI and Newman API tests for StudentTrack",
+  "type": "commonjs",
+  "scripts": {
+    "seed": "node support/seed-test-data.js",
+    "test:bdd": "cucumber-js",
+    "test:ui": "node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=Automation/reports/ui-junit.xml Automation/UI/login.ui.test.js",
+    "test:api": "node Automation/API/run-newman.js",
+    "test:all": "npm run test:bdd && npm run test:ui && npm run test:api"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "newman": "^6.2.1",
+    "selenium-webdriver": "^4.27.0"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}

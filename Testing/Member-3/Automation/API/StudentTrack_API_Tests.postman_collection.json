@@ -1,0 +1,355 @@
+{
+  "info": {
+    "name": "StudentTrack API Tests",
+    "description": "EC4206 Member 3 - API automation for StudentTrack (Express backend). Non-destructive: only reads data or sends requests that must be rejected. Names show the matching Member 1 test case / decision-table rule in [brackets]. Run with Newman via `npm run test:api`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "API-01 [TC009, DT-R5] Login - approved student, correct password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Returns a JWT token\", () => { pm.expect(body.token).to.be.a(\"string\"); pm.expect(body.token.split(\".\")).to.have.lengthOf(3); });",
+              "pm.test(\"User role is student\", () => pm.expect(body.user.role).to.eql(\"student\"));",
+              "pm.test(\"Email matches the login email\", () => pm.expect(body.user.email).to.eql(pm.variables.get(\"studentEmail\")));",
+              "pm.test(\"Password hash is not exposed\", () => pm.expect(body.user).to.not.have.property(\"password\"));",
+              "pm.test(\"Responds within 2 seconds\", () => pm.expect(pm.response.responseTime).to.be.below(2000));",
+              "// Save the token for the authenticated requests below",
+              "pm.collectionVariables.set(\"token\", body.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "Positive login. Saves the token for later requests.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{studentEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-02 [TC012, DT-R2] Login - approved student, wrong password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{studentEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-03 [TC013, DT-R1] Login - unregistered email",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Message is Invalid credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid credentials\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "Note: the message differs from API-02, which reveals whether an email is registered (possible OWASP A07 finding for Member 4).",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"not.registered@studenttrack.test\",\n  \"password\": \"{{studentPassword}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-04 [Additional] Login - missing password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Message is Email and password are required\", () => pm.expect(pm.response.json().message).to.eql(\"Email and password are required\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{studentEmail}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-05 [TC014, DT-R6] Login - pending account, correct password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 403\", () => pm.response.to.have.status(403));",
+              "pm.test(\"Message is Your account is awaiting admin approval.\", () => pm.expect(pm.response.json().message).to.eql(\"Your account is awaiting admin approval.\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{pendingEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-06 [Additional] Get profile - with valid token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Profile belongs to the logged-in student\", () => pm.expect(body.email).to.eql(pm.variables.get(\"studentEmail\")));",
+              "pm.test(\"Account is approved\", () => pm.expect(body.approvalStatus).to.eql(\"approved\"));",
+              "pm.test(\"Password hash is not exposed\", () => pm.expect(body).to.not.have.property(\"password\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/auth/profile", "host": ["{{baseUrl}}"], "path": ["auth", "profile"] },
+        "description": ""
+      }
+    },
+    {
+      "name": "API-07 [TC030 - API layer] Enrolled subjects - without token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 401\", () => pm.response.to.have.status(401));",
+              "pm.test(\"Message is No token, authorization denied\", () => pm.expect(pm.response.json().message).to.eql(\"No token, authorization denied\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/subjects/viewEnrolled", "host": ["{{baseUrl}}"], "path": ["subjects", "viewEnrolled"] },
+        "description": ""
+      }
+    },
+    {
+      "name": "API-08 [TC028 - API layer] All subjects - student token on admin-only endpoint",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 403\", () => pm.response.to.have.status(403));",
+              "pm.test(\"Message is Access denied\", () => pm.expect(pm.response.json().message).to.eql(\"Access denied\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/subjects", "host": ["{{baseUrl}}"], "path": ["subjects"] },
+        "description": "Role check: GET /api/subjects is admin only."
+      }
+    },
+    {
+      "name": "API-09 [TC020, EP-K2] Join subject - invalid enrollment key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Message is Invalid enrollment key\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid enrollment key\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/subjects/enrol", "host": ["{{baseUrl}}"], "path": ["subjects", "enrol"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"enrollmentKey\": \"INVALID-KEY-000\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-10 [TC019] Enrolled subjects - with valid token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Returns a list\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/subjects/viewEnrolled", "host": ["{{baseUrl}}"], "path": ["subjects", "viewEnrolled"] },
+        "description": ""
+      }
+    },
+    {
+      "name": "API-11 [DT-R3] Login - pending account, wrong password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "Decision table rule R3: password is checked before approval status.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{pendingEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-12 [DT-R4] Login - rejected account, wrong password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{rejectedEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "API-13 [TC015, DT-R7] Login - rejected account, correct password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 403\", () => pm.response.to.have.status(403));",
+              "pm.test(\"Message is Your registration was rejected. Please contact the administrator.\", () => pm.expect(pm.response.json().message).to.eql(\"Your registration was rejected. Please contact the administrator.\"));",
+              "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{rejectedEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "studentEmail", "value": "bdd.student@studenttrack.test" },
+    { "key": "pendingEmail", "value": "pending.student@studenttrack.test" },
+    { "key": "rejectedEmail", "value": "rejected.student@studenttrack.test" },
+    { "key": "studentPassword", "value": "" },
+    { "key": "token", "value": "" }
+  ]
+}
