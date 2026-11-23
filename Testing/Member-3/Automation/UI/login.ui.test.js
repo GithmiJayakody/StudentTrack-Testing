@@ -58,7 +58,7 @@ describe('StudentTrack login page (Selenium UI)', () => {
   it('UI-03 [TC013, DT-R1] unregistered email is rejected', async () => {
     await withBrowser('UI-03', async (driver, loginPage) => {
       await loginPage.login('not.registered@studenttrack.test', config.password);
-      assert.equal(await loginPage.getErrorText(), 'Invalid credentials');
+      assert.equal(await loginPage.getErrorText(), 'Invalid email or password');
       assert.match(await driver.getCurrentUrl(), /\/login\/?$/);
     });
   });
