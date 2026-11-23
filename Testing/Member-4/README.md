@@ -10,6 +10,7 @@ The testing activities cover:
 - Manual Security Testing based on selected OWASP security concerns.
 - Defect Tracking and Root Cause Analysis.
 - Code Quality Analysis using SonarQube.
+- Backend automated testing and coverage analysis using Jest and Supertest.
 
 ## 2. Performance Testing
 
@@ -75,22 +76,24 @@ Manual security testing was performed on selected authentication and authorizati
 | 8 | Invalid login credentials | 400 | 400 | Pass |
 | 9 | Email only login attempt | 400 | 400 | Pass |
 | 10 | Password only login attempt | 400 | 400 | Pass |
-| 11 | User enumeration test | Same generic error expected | Different error messages returned | Finding |
+| 11 | User enumeration test | Same generic error expected | Different error messages initially returned | Fixed and verified |
 
 ### 3.3 Security Finding
 
 **Finding: User Enumeration Through Login Error Messages**
 
-During testing, different error messages were returned for two login scenarios:
+During testing, different error messages were initially returned for two login scenarios:
 
 - Non-existing email: `Invalid credentials`
 - Existing email with an incorrect password: `Invalid login credentials`
 
-This difference may allow an attacker to identify registered email addresses.
+This difference could allow an attacker to identify registered email addresses.
 
-**Recommended Improvement:** Return the same generic error message, such as `Invalid email or password`, for both scenarios.
+**Improvement Implemented:** Both login failure conditions were updated to return the same generic error message:
 
-**Status:** Identified – Fix and verification pending.
+`Invalid email or password`
+
+**Status:** Fixed, retested, and verified.
 
 ### 3.4 Evidence
 
@@ -110,11 +113,11 @@ GitHub Issues was used to record, assign, track, and manage defects identified d
 
 **Issue #2: User Enumeration Through Different Login Error Messages**
 
-The login API returned different error messages for non-existing email addresses and existing email addresses with incorrect passwords.
+The login API initially returned different error messages for non-existing email addresses and existing email addresses with incorrect passwords.
 
 This could allow attackers to identify registered user email addresses.
 
-### Root Cause Analysis
+#### Root Cause Analysis
 
 The root cause was identified in the login route (`Backend/routes/auth.js`).
 
@@ -125,13 +128,13 @@ Two different error messages were returned:
 
 The different responses created a potential user enumeration vulnerability.
 
-### Fix Implemented
+#### Fix Implemented
 
 Both login failure conditions were updated to return the same generic error message:
 
 `Invalid email or password`
 
-### Retesting Results
+#### Retesting Results
 
 The fix was verified using Postman.
 
@@ -142,9 +145,7 @@ The fix was verified using Postman.
 
 Both scenarios returned the same generic error message.
 
-### Defect Lifecycle
-
-The complete defect lifecycle was followed for GitHub Issue #2.
+#### Defect Lifecycle
 
 `New → Assigned → Fixed → Verified → Closed`
 
@@ -156,7 +157,7 @@ The complete defect lifecycle was followed for GitHub Issue #2.
 | Verified | Both retesting scenarios passed |
 | Closed | GitHub Issue #2 closed after successful verification |
 
-### Supporting Evidence
+#### Supporting Evidence
 
 The following supporting documents and screenshots are available in the `Defects/Issue-2-User-Enumeration/` directory:
 
@@ -178,7 +179,7 @@ Although the frontend registration form enforced a minimum password length of 8 
 
 This allowed users to bypass frontend validation by sending direct API requests.
 
-### Root Cause Analysis
+#### Root Cause Analysis
 
 The root cause was identified in the registration route (`Backend/routes/auth.js`).
 
@@ -186,7 +187,7 @@ The backend registration route only checked whether the password field was empty
 
 As a result, a registration request containing a 3-character password (`123`) was accepted by the backend and returned HTTP 201 Created.
 
-### Fix Implemented
+#### Fix Implemented
 
 Backend password-length validation was added to the registration route.
 
@@ -196,7 +197,7 @@ If the password is shorter than 8 characters, the API returns HTTP 400 Bad Reque
 
 `Password must be at least 8 characters long`
 
-### Retesting Results
+#### Retesting Results
 
 The fix was verified using Postman.
 
@@ -207,9 +208,7 @@ The fix was verified using Postman.
 
 The backend successfully rejected the short password while accepting the valid password.
 
-### Defect Lifecycle
-
-The complete defect lifecycle was followed for GitHub Issue #3.
+#### Defect Lifecycle
 
 `New → Assigned → Fixed → Verified → Closed`
 
@@ -221,7 +220,7 @@ The complete defect lifecycle was followed for GitHub Issue #3.
 | Verified | Short and valid passwords tested successfully using Postman |
 | Closed | GitHub Issue #3 closed after successful verification |
 
-### Supporting Evidence
+#### Supporting Evidence
 
 The following supporting documents and screenshots are available in the `Defects/Issue-3-Weak-Password/` directory:
 
@@ -235,35 +234,147 @@ The following supporting documents and screenshots are available in the `Defects
 
 ## 5. SonarQube Analysis & Quality Metrics
 
-**Status:** Pending
+### 5.1 Testing Tool and Approach
 
-SonarQube will be used to analyse the StudentTrack codebase.
+**Tool:** SonarQube Community Build
 
-The following quality metrics will be collected:
+SonarQube was used to analyse the StudentTrack backend and frontend codebase to identify security, reliability, and maintainability issues.
 
-- Code Coverage (%)
-- Defect Density
-- Code Smells
-- Technical Debt
+Jest and Supertest were also integrated to generate backend automated test coverage information. The generated LCOV report was imported into SonarQube.
 
-Based on the analysis, 2–3 concrete code quality improvements will be proposed.
+### 5.2 Initial Analysis Results
 
-Screenshots and supporting evidence will be stored in the `SonarQube/` directory.
+| Metric | Initial Result |
+|---|---:|
+| Security Issues | 4 |
+| Reliability Issues | 70 |
+| Maintainability Issues | 3 |
+| Total Issues | 74 |
+| Overall Code Coverage | 0.0% |
+| Code Duplication | 6.4% |
+| Technical Debt | 1 day 3 hours |
+
+### 5.3 Final Analysis Results
+
+| Metric | Final Result |
+|---|---:|
+| Security Issues | 2 |
+| Reliability Issues | 70 |
+| Maintainability Issues | 3 |
+| Total Issues | 72 |
+| Overall Code Coverage | 7.5% |
+| New Code Coverage | 87.9% |
+| Code Duplication | 6.4% |
+| New Code Duplication | 0.0% |
+| New Code Issues | 0 |
+| Security Hotspots | 0 |
+| Quality Gate | Passed |
+
+The final analysis showed that overall code coverage increased from 7.0% in the subsequent analysis to 7.5%. The number of overall issues decreased from 74 to 72. No new issues were identified in the final New Code analysis.
+
+### 5.4 Jest Test Execution and Coverage
+
+A separate Jest test suite was created using Jest and Supertest.
+
+The tests covered:
+
+- StudentTrack API root endpoint response.
+- CORS access for the authorized frontend origin.
+- CORS handling for an unauthorized origin.
+- Absence of the Express `X-Powered-By` response header.
+
+**Test Execution Results**
+
+| Metric | Result |
+|---|---:|
+| Test Suites Passed | 1 |
+| Tests Passed | 4 |
+| Tests Failed | 0 |
+
+**Jest Coverage Results**
+
+| Coverage Metric | Result |
+|---|---:|
+| Statement Coverage | 27.33% |
+| Branch Coverage | 2.51% |
+| Function Coverage | 6.97% |
+| Line Coverage | 27.54% |
+
+### 5.5 Improvements Based on SonarQube Findings
+
+The following security improvements were implemented and verified.
+
+**Improvement 1 – Restrict CORS Configuration**
+
+The backend CORS configuration was updated to allow requests from the intended StudentTrack frontend origin instead of allowing all origins.
+
+**Verification:** Jest tests checked the authorized and unauthorized origin responses.
+
+**Improvement 2 – Disable Express Version Disclosure**
+
+The following configuration was added:
+
+```javascript
+app.disable('x-powered-by');
+```
+
+This prevents the Express framework information from being unnecessarily exposed through the `X-Powered-By` response header.
+
+**Verification:** A Jest test confirmed that the response did not contain the `X-Powered-By` header.
+
+### 5.6 SonarQube Analysis Warning
+
+During the final analysis, SonarQube reported missing Git blame information for:
+
+- `Backend/server.js`
+- `Backend/app.js`
+
+This warning indicates that Git blame information could not be retrieved for these files. However, the analysis completed successfully and the final Quality Gate passed.
+
+### 5.7 Recommendations
+
+The following additional improvements are recommended:
+
+1. Improve promise error handling to prevent unhandled promise rejections.
+2. Associate form labels with their corresponding input elements to improve accessibility.
+3. Use semantic HTML elements such as `<button>` and `<a>` for interactive components.
+4. Review hardcoded IP address configurations and other security-related findings.
+5. Expand automated tests to improve overall backend and frontend code coverage.
+
+### 5.8 Evidence
+
+SonarQube configuration, analysis logs, improvement records, coverage reports, and screenshots are available in the `SonarQube/` directory.
 
 ## 6. Evidence Directory Structure
 
 ```text
 Member-4/
 ├── Defects/
+│   ├── Issue-2-User-Enumeration/
+│   └── Issue-3-Weak-Password/
 ├── Performance/
 ├── Report/
 ├── Security/
 ├── SonarQube/
+│   ├── coverage-reports/
+│   ├── screenshots/
+│   │   ├── 01-Initial/
+│   │   ├── 02-Jest/
+│   │   ├── 03-After Jest Coverage Integration/
+│   │   ├── 04-After Improvements/
+│   │   └── 05-Final Analysis/
+│   └── SonarQube-Improvement-Log.md
 └── README.md
 ```
 
 ## 7. Conclusion
 
-Performance and selected security tests have been completed for the StudentTrack backend. The collected results and screenshots provide evidence of the testing activities performed.
+Performance testing, selected security testing, defect tracking, and SonarQube quality analysis were performed for the StudentTrack application.
 
-Defect Tracking, Root Cause Analysis, and SonarQube quality analysis will be completed as the next stages of the assignment.
+The JMeter test completed 25 requests with an error percentage of 0%, providing a baseline performance measurement for the backend root API.
+
+Two security-related defects were identified, documented, fixed, and verified through retesting. Jest and Supertest were integrated to provide automated backend testing, with all four tests passing.
+
+SonarQube was used to evaluate the codebase and identify security, reliability, and maintainability issues. Two selected security improvements were implemented and verified. The final analysis reported 7.5% overall coverage, 87.9% new code coverage, zero new code issues, and a passed Quality Gate.
+
+The remaining findings and recommendations provide opportunities for further improvements to the StudentTrack application.
