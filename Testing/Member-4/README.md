@@ -258,12 +258,16 @@ Jest and Supertest were also integrated to generate backend automated test cover
 
 | Metric | Final Result |
 |---|---:|
+| Lines of Code (LOC) | 8,655 |
+| Code Coverage | 7.5% |
+| New Code Coverage | 87.9% |
+| Defect Density | 0.231 defects/KLOC |
+| Code Smells | 46 |
+| Technical Debt | 295 minutes (4 hours 55 minutes) |
 | Security Issues | 2 |
 | Reliability Issues | 70 |
 | Maintainability Issues | 3 |
 | Total Issues | 72 |
-| Overall Code Coverage | 7.5% |
-| New Code Coverage | 87.9% |
 | Code Duplication | 6.4% |
 | New Code Duplication | 0.0% |
 | New Code Issues | 0 |
@@ -271,6 +275,24 @@ Jest and Supertest were also integrated to generate backend automated test cover
 | Quality Gate | Passed |
 
 The final analysis showed that overall code coverage increased from 7.0% in the subsequent analysis to 7.5%. The number of overall issues decreased from 74 to 72. No new issues were identified in the final New Code analysis.
+
+#### Defect Density Calculation
+
+Defect density was calculated using the two significant defects recorded in GitHub Issues and the total lines of code reported by SonarQube.
+
+- Number of recorded defects: 2
+- Total lines of code: 8,655
+- KLOC = 8,655 / 1,000 = 8.655
+
+**Formula:**
+
+Defect Density = Number of Defects / KLOC
+
+Defect Density = 2 / 8.655
+
+**Final Defect Density = 0.231 defects/KLOC**
+
+*Note: This is an approximate project-recorded defect density based on the two significant defects documented by Member 4. It does not represent every possible defect in the entire application.*
 
 ### 5.4 Jest Test Execution and Coverage
 
@@ -322,6 +344,12 @@ This prevents the Express framework information from being unnecessarily exposed
 
 **Verification:** A Jest test confirmed that the response did not contain the `X-Powered-By` header.
 
+**Additional Security Improvement – Backend Password Validation**
+
+Backend password-length validation was added to ensure that passwords contain at least 8 characters. This prevents users from bypassing frontend validation by sending direct API requests.
+
+**Verification:** Postman retesting confirmed that short passwords were rejected and valid passwords were accepted.
+
 ### 5.6 SonarQube Analysis Warning
 
 During the final analysis, SonarQube reported missing Git blame information for:
@@ -343,7 +371,13 @@ The following additional improvements are recommended:
 
 ### 5.8 Evidence
 
-SonarQube configuration, analysis logs, improvement records, coverage reports, and screenshots are available in the `SonarQube/` directory.
+SonarQube configuration, analysis logs, improvement records, coverage reports, and screenshots are available in the following directories:
+
+- `SonarQube/screenshots/`
+- `SonarQube/coverage-reports/`
+- `SonarQube/SonarQube Metrics/`
+
+The `SonarQube Metrics/` directory contains the final metrics documentation and supporting API screenshots.
 
 ## 6. Evidence Directory Structure
 
@@ -363,6 +397,10 @@ Member-4/
 │   │   ├── 03-After Jest Coverage Integration/
 │   │   ├── 04-After Improvements/
 │   │   └── 05-Final Analysis/
+│   ├── SonarQube Metrics/
+│   │   ├── 05_Final_LOC_API.png
+│   │   ├── 06_Final_CodeSmells_TechnicalDebt_API.png
+│   │   └── SonarQube-Metrics.md
 │   └── SonarQube-Improvement-Log.md
 └── README.md
 ```
@@ -375,6 +413,16 @@ The JMeter test completed 25 requests with an error percentage of 0%, providing 
 
 Two security-related defects were identified, documented, fixed, and verified through retesting. Jest and Supertest were integrated to provide automated backend testing, with all four tests passing.
 
-SonarQube was used to evaluate the codebase and identify security, reliability, and maintainability issues. Two selected security improvements were implemented and verified. The final analysis reported 7.5% overall coverage, 87.9% new code coverage, zero new code issues, and a passed Quality Gate.
+SonarQube was used to evaluate the codebase and identify security, reliability, and maintainability issues. Security improvements were implemented and verified.
+
+The final analysis reported:
+
+- 7.5% overall code coverage.
+- 87.9% new code coverage.
+- 0.231 defects/KLOC defect density.
+- 46 code smells.
+- 295 minutes of technical debt.
+- Zero new code issues.
+- A passed Quality Gate.
 
 The remaining findings and recommendations provide opportunities for further improvements to the StudentTrack application.
