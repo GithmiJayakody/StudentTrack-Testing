@@ -11,6 +11,9 @@ node_modules/
 dist/
 build/
 
+# Test coverage reports (generated)
+coverage/
+
 # Logs
 *.log
 npm-debug.log*
@@ -18,3 +21,6 @@ npm-debug.log*
 # IDE
 .vscode/
 .idea/
+
+# SonarQube temporary files
+.scannerwork/
