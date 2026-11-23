@@ -1,0 +1,4 @@
+"TestID","InputCondition","ExpectedOutput","StatementsCovered","ActualResult","Status"
+"WB-ST-01","req.user is undefined","403 Access denied; next() not called","Missing-user guard, error response, return","403 Access denied; next() not called","Passed"
+"WB-ST-02","req.user.role is student; roles=[admin]","403 Access denied; next() not called","First guard false; role guard, error response, return","403 Access denied; next() not called","Passed"
+"WB-ST-03","req.user.role is admin; roles=[admin]","next() called once","Both guards false; next()","next() called once","Passed"

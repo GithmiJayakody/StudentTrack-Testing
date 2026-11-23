@@ -1,0 +1,138 @@
+name: StudentTrack Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch: # adds a "Run workflow" button in the Actions tab
+
+jobs:
+  test:
+    name: Unit, BDD, UI and API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # A throwaway MongoDB just for this run - never the real database.
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      MONGO_URI: mongodb://127.0.0.1:27017/studenttrack_ci
+      PORT: 5000 # the frontend's api.js is hard-coded to http://localhost:5000/api
+      API_BASE_URL: http://localhost:5000/api
+      FRONTEND_URL: http://localhost:4173
+      HEADLESS: "true"
+      TEST_STUDENT_PASSWORD: ${{ secrets.TEST_STUDENT_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            StudentTrack/Backend/package-lock.json
+            StudentTrack/Frontend/package-lock.json
+            Testing/Member-3/package-lock.json
+
+      - name: Check test secret is configured
+        run: |
+          if [ -z "$TEST_STUDENT_PASSWORD" ]; then
+            echo "::error::Add a repository secret named TEST_STUDENT_PASSWORD (Settings > Secrets and variables > Actions)"
+            exit 1
+          fi
+
+      - name: Create a one-time JWT secret for this run
+        run: |
+          JWT_SECRET=$(openssl rand -hex 32)
+          echo "::add-mask::$JWT_SECRET"
+          echo "JWT_SECRET=$JWT_SECRET" >> "$GITHUB_ENV"
+
+      # ---------- Backend ----------
+      - name: Install backend dependencies
+        working-directory: StudentTrack/Backend
+        run: npm ci
+
+      - name: Run unit tests with coverage (Member 2 - Jest)
+        working-directory: StudentTrack/Backend
+        run: npm run coverage:member2
+
+      - name: Start backend API
+        working-directory: StudentTrack/Backend
+        run: |
+          nohup node server.js > backend.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:5000/ > /dev/null && echo "Backend is up" && exit 0
+            sleep 2
+          done
+          echo "::error::Backend did not start"; cat backend.log; exit 1
+
+      # ---------- Frontend ----------
+      - name: Install and build frontend
+        working-directory: StudentTrack/Frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Start frontend (vite preview)
+        working-directory: StudentTrack/Frontend
+        run: |
+          nohup npx vite preview --port 4173 --strictPort > frontend.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:4173/login > /dev/null && echo "Frontend is up" && exit 0
+            sleep 2
+          done
+          echo "::error::Frontend did not start"; cat frontend.log; exit 1
+
+      # ---------- Member 3 tests ----------
+      - name: Install Member 3 test dependencies
+        working-directory: Testing/Member-3
+        run: npm ci
+
+      - name: Seed synthetic test accounts
+        id: seed
+        working-directory: Testing/Member-3
+        run: npm run seed
+
+      - name: Run BDD scenarios (Cucumber + Selenium)
+        working-directory: Testing/Member-3
+        run: npm run test:bdd
+
+      - name: Run UI automation (Selenium)
+        # run even if BDD failed, so you see every result in one run
+        if: ${{ !cancelled() && steps.seed.outcome == 'success' }}
+        working-directory: Testing/Member-3
+        run: npm run test:ui
+
+      - name: Run API automation (Postman collection via Newman)
+        if: ${{ !cancelled() && steps.seed.outcome == 'success' }}
+        working-directory: Testing/Member-3
+        run: npm run test:api
+
+      # ---------- Evidence ----------
+      - name: Upload test reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            Testing/Member-2/Unit-Testing/reports/coverage/
+            Testing/Member-3/BDD/reports/
+            Testing/Member-3/Automation/reports/
+          if-no-files-found: ignore
+
+      - name: Show server logs if something failed
+        if: failure()
+        run: |
+          echo "----- backend.log -----";  cat StudentTrack/Backend/backend.log  || true
+          echo "----- frontend.log -----"; cat StudentTrack/Frontend/frontend.log || true
