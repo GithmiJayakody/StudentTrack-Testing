@@ -23,5 +23,5 @@ Feature: Student login
   Scenario: Student enters an incorrect password
     When the student enters a valid email and an incorrect password
     And submits the login form
-    Then the error message "Invalid login credentials" should be displayed
+    Then the error message "Invalid email or password" should be displayed
     And the student should remain on the login page

@@ -28,13 +28,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "Positive login. Saves the token for later requests.",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{studentEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -47,7 +65,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
-              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"Message is Invalid email or password\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid email or password\"));",
               "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
             ]
           }
@@ -55,13 +73,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{studentEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -74,7 +110,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
-              "pm.test(\"Message is Invalid credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid credentials\"));",
+              "pm.test(\"Message is Invalid email or password\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid email or password\"));",
               "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
             ]
           }
@@ -82,13 +118,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
-        "description": "Note: the message differs from API-02, which reveals whether an email is registered (possible OWASP A07 finding for Member 4).",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Same generic message as API-02, so the response does not reveal whether an email is registered (user enumeration fix by Member 4, OWASP A07).",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"not.registered@studenttrack.test\",\n  \"password\": \"{{studentPassword}}\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -109,13 +163,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{studentEmail}}\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -136,13 +208,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{pendingEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -165,8 +255,22 @@
       ],
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-        "url": { "raw": "{{baseUrl}}/auth/profile", "host": ["{{baseUrl}}"], "path": ["auth", "profile"] },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/profile",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "profile"
+          ]
+        },
         "description": ""
       }
     },
@@ -187,7 +291,16 @@
       "request": {
         "method": "GET",
         "header": [],
-        "url": { "raw": "{{baseUrl}}/subjects/viewEnrolled", "host": ["{{baseUrl}}"], "path": ["subjects", "viewEnrolled"] },
+        "url": {
+          "raw": "{{baseUrl}}/subjects/viewEnrolled",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subjects",
+            "viewEnrolled"
+          ]
+        },
         "description": ""
       }
     },
@@ -207,8 +320,21 @@
       ],
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-        "url": { "raw": "{{baseUrl}}/subjects", "host": ["{{baseUrl}}"], "path": ["subjects"] },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/subjects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subjects"
+          ]
+        },
         "description": "Role check: GET /api/subjects is admin only."
       }
     },
@@ -229,15 +355,34 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/subjects/enrol", "host": ["{{baseUrl}}"], "path": ["subjects", "enrol"] },
+        "url": {
+          "raw": "{{baseUrl}}/subjects/enrol",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subjects",
+            "enrol"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"enrollmentKey\": \"INVALID-KEY-000\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -257,8 +402,22 @@
       ],
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-        "url": { "raw": "{{baseUrl}}/subjects/viewEnrolled", "host": ["{{baseUrl}}"], "path": ["subjects", "viewEnrolled"] },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/subjects/viewEnrolled",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subjects",
+            "viewEnrolled"
+          ]
+        },
         "description": ""
       }
     },
@@ -271,7 +430,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
-              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"Message is Invalid email or password\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid email or password\"));",
               "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
             ]
           }
@@ -279,13 +438,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "Decision table rule R3: password is checked before approval status.",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{pendingEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -298,7 +475,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));",
-              "pm.test(\"Message is Invalid login credentials\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid login credentials\"));",
+              "pm.test(\"Message is Invalid email or password\", () => pm.expect(pm.response.json().message).to.eql(\"Invalid email or password\"));",
               "pm.test(\"No token is returned\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));"
             ]
           }
@@ -306,13 +483,31 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{rejectedEmail}}\",\n  \"password\": \"{{studentPassword}}-wrong\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     },
@@ -333,23 +528,59 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
         "description": "",
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"{{rejectedEmail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       }
     }
   ],
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:5000/api" },
-    { "key": "studentEmail", "value": "bdd.student@studenttrack.test" },
-    { "key": "pendingEmail", "value": "pending.student@studenttrack.test" },
-    { "key": "rejectedEmail", "value": "rejected.student@studenttrack.test" },
-    { "key": "studentPassword", "value": "" },
-    { "key": "token", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "studentEmail",
+      "value": "bdd.student@studenttrack.test"
+    },
+    {
+      "key": "pendingEmail",
+      "value": "pending.student@studenttrack.test"
+    },
+    {
+      "key": "rejectedEmail",
+      "value": "rejected.student@studenttrack.test"
+    },
+    {
+      "key": "studentPassword",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
   ]
 }
