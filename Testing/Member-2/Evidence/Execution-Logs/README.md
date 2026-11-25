@@ -1,3 +1,34 @@
-# Jest execution evidence
+# Execution Logs
 
-No Jest execution logs or screenshots are included. Jest installation was attempted but npm could not resolve `registry.npmjs.org` (`ENOTFOUND`). Run the documented Jest commands from `StudentTrack/Backend` when registry access is available, then save the genuine terminal output here and capture screenshots if required by the lecturer. Do not treat the expected outcomes in test tables as executed results.
+The Member 2 Jest tests were executed successfully.
+
+## Test Results
+
+- Test suites: 1 passed
+- Tests: 6 passed
+
+## Coverage Results
+
+The coverage command reported the following results for `StudentTrack/Backend/middleware/auth.js`:
+
+- Statement coverage: 100%
+- Branch coverage: 100%
+- Function coverage: 100%
+- Line coverage: 100%
+
+These coverage results apply only to `auth.js`, not the entire application.
+
+## Supporting Evidence
+
+The terminal screenshots documenting the Jest test run and coverage summary are stored in:
+
+`Testing/Member-2/Evidence/Screenshots/`
+
+- `Jest_Test_Run.png`
+- `Jest_Coverage_Summary.png`
+
+The generated coverage report is available in:
+
+`Testing/Member-2/Unit-Testing/reports/coverage/`
+
+No separate raw terminal log file is included in this directory. The screenshots and generated coverage report provide the available execution evidence.

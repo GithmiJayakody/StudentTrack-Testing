@@ -1,10 +1,50 @@
-# Member 2 Preparation Record
+# Preparation Record
 
-- **Source inspected:** supplied StudentTrack archive, `StudentTrack/Backend/middleware/auth.js`.
-- **Original behavior:** `authorizeRoles()` dereferenced `req.user.role` without a missing-user guard.
-- **Proposed source change:** final copy adds a missing-user 403 guard; this is explicitly identified as a Member 2 TDD change and is not the untouched original.
-- **Shared repository:** not cloned; no GitHub URL or invitation was supplied.
-- **Secrets:** no `.env` file is included. `.env.example` contains placeholders only.
-- **Database:** tests are designed to avoid MongoDB.
-- **Jest:** implementation and config are prepared. `npm install --save-dev jest` was attempted, but failed because the workspace could not resolve `registry.npmjs.org` (`ENOTFOUND`). No Jest tests or coverage report were executed; results remain pending.
-- **Red/green evidence:** pending an actual Jest run; no TDD execution history is claimed.
+## Purpose
+
+This record documents the preparation and execution of Member 2's Jest unit testing and white-box testing work for the StudentTrack project.
+
+## Test Environment
+
+- Test framework: Jest
+- Test target: `StudentTrack/Backend/middleware/auth.js`
+- Test file: `Testing/Member-2/Unit-Testing/tests/authMiddleware.test.js`
+- Jest configuration: `StudentTrack/Backend/jest.config.js`
+
+## Preparation and Execution
+
+The Jest dependencies were installed successfully in the project environment. The Member 2 test suite and coverage command were executed.
+
+- Test suites: 1 passed
+- Tests: 6 passed
+- Statement coverage for `auth.js`: 100%
+- Branch coverage for `auth.js`: 100%
+- Function coverage for `auth.js`: 100%
+- Line coverage for `auth.js`: 100%
+
+The coverage percentages apply only to the tested `auth.js` middleware, not the entire application.
+
+## TDD Evidence
+
+A red/green TDD demonstration was completed:
+
+- Red phase: the focused test failed when the missing-user guard was temporarily removed.
+- Green phase: the guard was restored and the focused test passed.
+
+The corresponding screenshots are stored in `Screenshots/`:
+
+- `TDD_Red_Test_Failure.png`
+- `TDD_Green_Test_Pass.png`
+
+## Supporting Evidence
+
+The following screenshots document the test execution and coverage results:
+
+- `Jest_Test_Run.png`
+- `Jest_Coverage_Summary.png`
+
+The coverage report is available under `Testing/Member-2/Unit-Testing/reports/coverage/`.
+
+## Notes
+
+No test results or coverage percentages have been fabricated. The documented results reflect the completed test run and the available evidence.

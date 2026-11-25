@@ -1,40 +1,83 @@
 # White-Box Testing Report
 
-## Objective and source
+## 1. Introduction
 
-This report covers EC4206 Section 3.4 for the StudentTrack backend. The selected function is `authorizeRoles` in `StudentTrack/Backend/middleware/auth.js`. The source used in the final submission includes a proposed missing-user guard. The untouched original source from the supplied archive did not include that guard and would throw when `req.user` is absent. See `Unit-Testing/reports/Unit_Testing_Report.md` for the change and TDD status.
+This report documents the white-box testing work completed for Member 2 of the StudentTrack – Student Attendance Management System project.
 
-## Control flow and complexity
+The selected function is `authorizeRoles` in `StudentTrack/Backend/middleware/auth.js`.
 
-The function has two decisions: whether `req.user` exists, and whether its role is in the allowed roles. The CFG is `Control-Flow-Graph/authorizeRoles-CFG.png`.
+## 2. Testing Scope
 
-`V(G) = D + 1 = 2 + 1 = 3`. By the graph formula, `V(G) = E - N + 2P = 8 - 7 + 2 = 3` (one connected component).
+The work covers the selected function's control flow, cyclomatic complexity, statement coverage, and branch coverage.
 
-## Statement coverage test design
+The unit tests use Jest to test the authentication middleware behavior.
 
-| ID | Input | Expected outcome | Statements covered | Execution result |
-|---|---|---|---|---|
-| WB-ST-01 | `req.user` absent | 403; no `next()` | missing-user guard, error response, return | Pending Jest run |
-| WB-ST-02 | Student role; allowed role is admin | 403; no `next()` | first decision false; role-denial statements | Pending Jest run |
-| WB-ST-03 | Admin role; allowed role is admin | `next()` once | both decisions false; continuation | Pending Jest run |
+## 3. Control-Flow Graph
 
-These cases are designed to execute every statement in the selected middleware. Coverage is a design expectation only until the configured Jest run confirms it.
+The control-flow graph for `authorizeRoles` is available at:
 
-## Branch coverage test design
+`Testing/Member-2/White-Box-Testing/Control-Flow-Graph/authorizeRoles-CFG.png`
 
-| Decision | Outcome | Test ID | Expected | Execution result |
-|---|---|---|---|---|
-| `req.user` exists | Missing user path | WB-ST-01 | 403 | Pending Jest run |
-| `req.user` exists | User present path | WB-ST-02, WB-ST-03 | Continue to role decision | Pending Jest run |
-| Role allowed | Allowed | WB-ST-03 | Call `next()` | Pending Jest run |
-| Role allowed | Not allowed | WB-ST-02 | 403 | Pending Jest run |
+The graph represents the function's control flow, including its decision points and exit.
 
-The test design covers all four decision outcomes. Actual Jest coverage is unverified; do not report a percentage until running `npm run coverage:member2`.
+## 4. Cyclomatic Complexity
 
-## Expected vs actual results
+The cyclomatic complexity calculation is documented in:
 
-Expected behavior is recorded in the case tables and CSVs. Actual results are marked pending because Jest could not be installed here: `npm install` failed with `ENOTFOUND registry.npmjs.org`. No Jest execution output or coverage percentage is represented as actual evidence.
+`Testing/Member-2/White-Box-Testing/Cyclomatic-Complexity/Cyclomatic_Complexity.md`
 
-## Limitations
+The calculation and path details are provided in that file.
 
-Tests invoke middleware directly using request/response mocks. They do not verify Express route ordering, database behavior, browser UI, or deployment configuration.
+## 5. Test Design and Coverage
+
+The statement coverage test cases are documented in:
+
+`Testing/Member-2/White-Box-Testing/Statement-Coverage/Statement_Coverage_Test_Cases.csv`
+
+The branch coverage test cases are documented in:
+
+`Testing/Member-2/White-Box-Testing/Branch-Coverage/Branch_Coverage_Test_Cases.csv`
+
+## 6. Execution Results
+
+The Jest test suite completed successfully:
+
+- Test suites: 1 passed
+- Tests: 6 passed
+
+Coverage results for `StudentTrack/Backend/middleware/auth.js`:
+
+| Coverage Type | Result |
+|---|---:|
+| Statement Coverage | 100% |
+| Branch Coverage | 100% |
+| Function Coverage | 100% |
+| Line Coverage | 100% |
+
+**These coverage results apply only to the tested `auth.js` middleware, not to the entire application.**
+
+The Jest execution and coverage screenshots are available in:
+
+`Testing/Member-2/Evidence/Screenshots/`
+
+The generated coverage report is available in:
+
+`Testing/Member-2/Unit-Testing/reports/coverage/`
+
+## 7. TDD Evidence
+
+The TDD demonstration included:
+
+- **Red phase:** The focused test failed when the missing-user guard was temporarily removed.
+- **Green phase:** The guard was restored and the focused test passed.
+
+Evidence screenshots:
+
+- `TDD_Red_Test_Failure.png`
+- `TDD_Green_Test_Pass.png`
+
+## 8. Limitations
+
+The reported coverage is limited to the tested `auth.js` middleware. It does not indicate 100% coverage of the complete StudentTrack application.
+
+The test results document the executed Jest suite and do not claim that unrelated application components were tested.
