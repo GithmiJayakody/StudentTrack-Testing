@@ -55,9 +55,4 @@ Useful files to show during the evaluation:
 
 - Repository: https://github.com/GithmiJayakody/StudentTrack-Testing
 - Branch: `member2-tested-final`
-- Three commits have been created locally.
-- Push is still pending.
 
-After pushing, verify that the branch and commits appear in the GitHub repository.
-
-Do not commit `.env` files, credentials, access tokens, or `node_modules`.

@@ -37,13 +37,3 @@ Note: The 100% coverage applies to `auth.js`, not the entire application.
 ## Git Information
 
 - Branch: `member2-tested-final`
-- Three local commits have been created.
-- GitHub push is still pending.
-
-After pushing, verify the branch on GitHub:
-
-```powershell
-git push -u origin member2-tested-final
-```
-
-Never commit `.env` files, credentials, access tokens, or `node_modules`.
